@@ -1,0 +1,23 @@
+<div class="container">
+  <h1>📦 Nexus Market Catalog</h1>
+  
+  <button (click)="loadProducts()">Recargar Productos</button>
+
+  <div class="product-grid">
+    
+    @for (product of products; track product.id) {
+      <div class="product-card">
+        <h3>{{ product.name }}</h3>
+        <p class="price">${{ product.price }}</p>
+        <p>Stock: {{ product.stock }}</p>
+        
+        @if (product.stock === 0) {
+          <span class="out-of-stock">¡Agotado!</span>
+        }
+      </div>
+    } @empty {
+      <p>Cargando productos o no hay inventario...</p>
+    }
+
+  </div>
+</div>
