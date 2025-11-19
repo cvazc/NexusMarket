@@ -7,7 +7,7 @@ import { Product } from '../models/product';
   providedIn: 'root',
 })
 export class CatalogService {
-  private apiUrl = 'http://localhost:5110/api/products';
+  private apiUrl = 'https://legendary-spoon-r4g5wqp46gxq3prg5-5110.app.github.dev/api/products';
 
   constructor(private http: HttpClient) {}
   getProducts(): Observable<Product[]> {
