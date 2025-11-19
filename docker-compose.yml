@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  sql-server-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: nexus-sql-server
+    user: root
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Password12345
+    ports:
+    - "1433:1433"
+    volumes:
+    - sql_data:/var/opt/mssql
+    networks:
+    - nexus-network
+
+volumes:
+  sql_data:
+
+networks:
+  nexus-network:
+    driver: bridge
