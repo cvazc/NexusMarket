@@ -1,0 +1,24 @@
+{
+  "name": "C# .NET & Angular & SQL",
+  "image": "mcr.microsoft.com/devcontainers/dotnet:8.0",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "lts"
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-dotnettools.csharp",
+        "ms-mssql.mssql",
+        "angular.ng-template"
+      ]
+    }
+  },
+  "forwardPorts": [5110, 4200, 1433],
+  "postCreateCommand": "dotnet tool install -g dotnet-ef && npm install -g @angular/cli"
+}
