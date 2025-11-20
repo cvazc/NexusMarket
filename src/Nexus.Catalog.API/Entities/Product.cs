@@ -21,5 +21,20 @@ namespace Nexus.Catalog.API.Entities
         public int Stock { get; set; }
 
         public bool IsActive { get; set; } = true;
+
+        public void RemoveStock(int quantity)
+        {
+            if (quantity <= 0)
+            {
+                throw new ArgumentException("Quantity to remove must be greater than zero.");
+            }
+            
+            if (quantity > this.Stock)
+            {
+                throw new InvalidOperationException("Not enough stock available.");
+            }
+
+            this.Stock -= quantity;
+        }
     }
 }
