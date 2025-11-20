@@ -25,7 +25,15 @@
         <textarea formControlName="description"></textarea>
       </div>
 
-      <button type="submit" [disabled]="productForm.invalid">Crear Producto</button>
+      <div class="form-actions">
+        <button type="submit" [disabled]="productForm.invalid" [class.btn-update]="isEditing">
+          {{ isEditing ? 'Actualizar Producto' : 'Crear Producto' }}
+        </button>
+
+        @if (isEditing) {
+        <button type="button" class="btn-cancel" (click)="onCancelEdit()">Cancelar Edición</button>
+        }
+      </div>
     </form>
   </div>
 
@@ -40,17 +48,15 @@
         <h3>{{ product.name }}</h3>
         <p class="price">${{ product.price }}</p>
         <p>Stock: {{ product.stock }}</p>
-        
+
         @if (product.stock === 0) {
-          <span class="out-of-stock">¡Agotado!</span>
+        <span class="out-of-stock">¡Agotado!</span>
         }
 
         <div class="actions">
-            <button class="btn-delete" (click)="deleteProduct(product.id)">
-                🗑️ Eliminar
-            </button>
+          <button class="btn-edit" (click)="onEdit(product)">✏️ Editar</button>
+          <button class="btn-delete" (click)="deleteProduct(product.id)">🗑️ Eliminar</button>
         </div>
-
       </div>
 
       } @empty {

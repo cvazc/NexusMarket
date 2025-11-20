@@ -21,4 +21,8 @@ export class CatalogService {
   deleteProduct(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+  updateProduct(id: number, product: Product): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${id}`, product);
+  }
 }

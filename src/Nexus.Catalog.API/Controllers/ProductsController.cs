@@ -68,5 +68,44 @@ namespace Nexus.Catalog.API.Controllers
 
             return NoContent();
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateProduct(int id, ProductDto productDto)
+        {
+            if (id != productDto.Id)
+            {
+                return BadRequest("El ID de la URL no coincide con el del producto.");
+            }
+
+            var productExisting = await _context.Products.FindAsync(id);
+
+            if (productExisting == null)
+            {
+                return NotFound();
+            }
+
+            productExisting.Name = productDto.Name;
+            productExisting.Description = productDto.Description;
+            productExisting.Price = productDto.Price;
+            productExisting.Stock = productDto.Stock;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!_context.Products.Any(p => p.Id == id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
     }
 }

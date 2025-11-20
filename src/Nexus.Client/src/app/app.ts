@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
 import { CatalogService } from './services/catalog';
 import { Product } from './models/product';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -8,7 +7,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
@@ -16,6 +15,9 @@ export class App implements OnInit {
   products: Product[] = [];
   title = 'Nexus Market';
   productForm: FormGroup;
+
+  isEditing: boolean = false;
+  currentProductId: number | null = null;
 
   constructor(private catalogService: CatalogService, private fb: FormBuilder) {
     this.productForm = this.fb.group({
@@ -39,16 +41,28 @@ export class App implements OnInit {
 
   onSubmit() {
     if (this.productForm.valid) {
-      const newProduct = this.productForm.value;
+      const productData = this.productForm.value;
 
-      this.catalogService.createProduct(newProduct).subscribe({
-        next: (product) => {
-          console.log('Creado:', product);
-          this.products.push(product);
-          this.productForm.reset();
-        },
-        error: (err) => alert('Error al crear producto: ' + err.message),
-      });
+      if (this.isEditing && this.currentProductId) {
+        const productToUpdate = { ...productData, id: this.currentProductId };
+        this.catalogService.updateProduct(this.currentProductId, productToUpdate).subscribe({
+          next: () => {
+            console.log('Producto actualizado');
+            this.loadProducts();
+            this.onCancelEdit();
+          },
+          error: (err) => alert('Error al actualizar: ' + err.message),
+        });
+      } else {
+        this.catalogService.createProduct(productData).subscribe({
+          next: (product) => {
+            console.log('Creado:', product);
+            this.products.push(product);
+            this.productForm.reset();
+          },
+          error: (err) => alert('Error al crear producto: ' + err.message),
+        });
+      }
     } else {
       alert('Formulario inválido, revisa los campos.');
     }
@@ -69,5 +83,18 @@ export class App implements OnInit {
         },
       });
     }
+  }
+
+  onEdit(product: Product) {
+    this.isEditing = true;
+    this.currentProductId = product.id;
+
+    this.productForm.patchValue(product);
+  }
+
+  onCancelEdit() {
+    this.isEditing = false;
+    this.currentProductId = null;
+    this.productForm.reset();
   }
 }
