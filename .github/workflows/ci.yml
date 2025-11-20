@@ -18,10 +18,10 @@ jobs:
             dotnet-version: 8.0.x
         
         - name: Restore dependencies
-          run: dotnet restore NexusMarket.sln
+          run: dotnet restore src/NexusMarket.sln
 
         - name: Build
-          run: dotnet build NexusMarket.sln --no-restore
+          run: dotnet build src/NexusMarket.sln --no-restore
         
         - name: Test
-          run: dotnet test NexusMarket.sln --no-build --verbosity normal
+          run: dotnet test src/NexusMarket.sln --no-build --verbosity normal
