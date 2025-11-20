@@ -32,8 +32,8 @@ export class App implements OnInit {
 
   loadProducts() {
     this.catalogService.getProducts().subscribe({
-      next: (data) => this.products = data,
-      error: (err) => console.error('Error cargando:', err)
+      next: (data) => (this.products = data),
+      error: (err) => console.error('Error cargando:', err),
     });
   }
 
@@ -47,10 +47,27 @@ export class App implements OnInit {
           this.products.push(product);
           this.productForm.reset();
         },
-        error: (err) => alert('Error al crear producto: ' + err.message)
+        error: (err) => alert('Error al crear producto: ' + err.message),
       });
     } else {
       alert('Formulario inválido, revisa los campos.');
+    }
+  }
+
+  deleteProduct(id: number) {
+    const confirmDelete = confirm('¿Estás seguro de que quieres eliminar este producto?');
+
+    if (confirmDelete) {
+      this.catalogService.deleteProduct(id).subscribe({
+        next: () => {
+          console.log('Producto eliminado con éxito');
+          this.products = this.products.filter((p) => p.id !== id);
+        },
+        error: (err) => {
+          console.error('Error al eliminar:', err);
+          alert('No se pudo eliminar el producto.');
+        },
+      });
     }
   }
 }

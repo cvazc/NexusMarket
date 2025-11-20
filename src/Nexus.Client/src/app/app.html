@@ -1,24 +1,23 @@
 <div class="container">
   <h1>📦 Nexus Market Catalog</h1>
-  
+
   <div class="form-container">
     <h2>Nuevo Producto</h2>
-    
+
     <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
-      
       <div class="form-group">
         <label>Nombre:</label>
-        <input type="text" formControlName="name" placeholder="Ej: Laptop Gamer">
+        <input type="text" formControlName="name" placeholder="Ej: Laptop Gamer" />
       </div>
 
       <div class="form-group">
         <label>Precio:</label>
-        <input type="number" formControlName="price">
+        <input type="number" formControlName="price" />
       </div>
 
       <div class="form-group">
         <label>Stock:</label>
-        <input type="number" formControlName="stock">
+        <input type="number" formControlName="stock" />
       </div>
 
       <div class="form-group">
@@ -27,11 +26,38 @@
       </div>
 
       <button type="submit" [disabled]="productForm.invalid">Crear Producto</button>
-    
     </form>
   </div>
 
-  <hr> <button (click)="loadProducts()">Recargar Productos</button>
+  <hr />
   <div class="product-grid">
+    <button (click)="loadProducts()">Recargar Productos</button>
+
+    <div class="product-grid">
+      @for (product of products; track product.id) {
+
+      <div class="product-card">
+        <h3>{{ product.name }}</h3>
+        <p class="price">${{ product.price }}</p>
+        <p>Stock: {{ product.stock }}</p>
+        
+        @if (product.stock === 0) {
+          <span class="out-of-stock">¡Agotado!</span>
+        }
+
+        <div class="actions">
+            <button class="btn-delete" (click)="deleteProduct(product.id)">
+                🗑️ Eliminar
+            </button>
+        </div>
+
       </div>
+
+      } @empty {
+
+      <p>Cargando productos o no hay inventario...</p>
+
+      }
+    </div>
+  </div>
 </div>
