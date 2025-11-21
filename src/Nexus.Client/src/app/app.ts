@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { CatalogService } from './services/catalog';
 import { Product } from './models/product';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router, RouterOutlet } from '@angular/router';
+import { Auth } from './services/auth';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, RouterOutlet, ReactiveFormsModule],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
@@ -19,7 +21,12 @@ export class App implements OnInit {
   isEditing: boolean = false;
   currentProductId: number | null = null;
 
-  constructor(private catalogService: CatalogService, private fb: FormBuilder) {
+  constructor(
+    private catalogService: CatalogService, 
+    private fb: FormBuilder,
+    public router: Router,
+    public auth: Auth
+  ) {
     this.productForm = this.fb.group({
       name: ['', [Validators.required]],
       price: [0, [Validators.required, Validators.min(0.01)]],
