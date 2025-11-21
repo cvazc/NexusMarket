@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using Nexus.Catalog.API.DTOs;
 using Nexus.Catalog.API.Entities;
 using Nexus.Catalog.API.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Nexus.Catalog.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class ProductsController : ControllerBase
     {
         private readonly IProductRepository _repository;
@@ -20,6 +22,7 @@ namespace Nexus.Catalog.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts()
         {
             var products = await _repository.GetAllAsync();
@@ -27,6 +30,7 @@ namespace Nexus.Catalog.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<ProductDto>> GetProduct(int id)
         {
             var product = await _repository.GetByIdAsync(id);
