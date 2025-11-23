@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Auth {
-  private apiUrl = 'https://legendary-spoon-r4g5wqp46gxq3prg5-5110.app.github.dev/api/auth';
+  private apiUrl = `${environment.apiUrl}/auth`;
   private tokenKey = 'nexus_token';
 
   constructor(private http: HttpClient, private router: Router) {}
